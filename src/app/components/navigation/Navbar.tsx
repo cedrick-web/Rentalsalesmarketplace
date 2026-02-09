@@ -22,9 +22,10 @@ interface NavbarProps {
   };
   notificationCount?: number;
   onSearch?: (query: string) => void;
+  onNavigate?: (tab: string) => void;
 }
 
-export function Navbar({ user, notificationCount = 0, onSearch }: NavbarProps) {
+export function Navbar({ user, notificationCount = 0, onSearch, onNavigate }: NavbarProps) {
   const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');

@@ -10,7 +10,11 @@ import { Switch } from '../ui/switch';
 import { Label } from '../ui/label';
 import { Product } from '../../../types';
 
-export function HomePage() {
+interface HomePageProps {
+  onProductClick?: (product: Product) => void;
+}
+
+export function HomePage({ onProductClick }: HomePageProps) {
   const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<'rent' | 'buy'>('rent');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -22,6 +26,14 @@ export function HomePage() {
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     );
+  };
+
+  const handleProductClick = (product: Product) => {
+    if (onProductClick) {
+      onProductClick(product);
+    } else {
+      setSelectedProduct(product);
+    }
   };
 
   const filteredProducts = mockProducts.filter(product => {
@@ -115,7 +127,7 @@ export function HomePage() {
               viewMode={viewMode}
               isWishlisted={wishlist.includes(product.id)}
               onToggleWishlist={() => toggleWishlist(product.id)}
-              onViewDetails={() => setSelectedProduct(product)}
+              onViewDetails={() => handleProductClick(product)}
             />
           ))}
         </div>

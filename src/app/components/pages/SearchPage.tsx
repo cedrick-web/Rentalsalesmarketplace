@@ -10,13 +10,22 @@ import { Button } from '../ui/button';
 interface SearchPageProps {
   filters?: any;
   category?: string | null;
+  onProductClick?: (product: Product) => void;
 }
 
-export function SearchPage({ filters, category }: SearchPageProps) {
+export function SearchPage({ filters, category, onProductClick }: SearchPageProps) {
   const { t } = useTranslation();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [viewMode, setViewMode] = useState<'rent' | 'buy'>('rent');
   const [wishlist, setWishlist] = useState<string[]>([]);
+
+  const handleProductClick = (product: Product) => {
+    if (onProductClick) {
+      onProductClick(product);
+    } else {
+      setSelectedProduct(product);
+    }
+  };
 
   const filteredProducts = mockProducts.filter(product => {
     if (category && product.category !== category) return false;
@@ -51,7 +60,7 @@ export function SearchPage({ filters, category }: SearchPageProps) {
                     : [...prev, product.id]
                 );
               }}
-              onViewDetails={() => setSelectedProduct(product)}
+              onViewDetails={() => handleProductClick(product)}
             />
           ))}
         </div>
